@@ -12,7 +12,7 @@ function TodoSearch({searchValue, setSearchValue}) {
   return [
     <input
       className="TodoSearch"
-      placeholder="Cebolla"
+      placeholder="Llorar por el Semestre"
       value={searchValue}
       onChange={onSearchValueChange}
     />

@@ -1,32 +1,26 @@
 import React from "react";
-import { TodoCounter } from '../TodoCounter/TodoCounter';
-import { TodoSearch } from '../TodoSearch/TodoSearch.jsx';
-import { TodoList } from '../TodoList/TodoList.jsx';
-import { TodoItem } from '../TodoItem/TodoItem.jsx';
-import { CreateTodoButton } from '../CreateTodoButton/CreateTodoButton.jsx';
+import { TodoContext } from "../TodoContext/TodoContext";
+import { TodoCounter } from "../TodoCounter/TodoCounter";
+import { TodoSearch } from "../TodoSearch/TodoSearch";
+import { TodoList } from "../TodoList/TodoList";
+import { TodoItem } from "../TodoItem/TodoItem";
+import { TodoForm } from "../TodoForm/TodoForm";
+import { CreateTodoButton } from "../CreateTodoButton/CreateTodoButton";
+import { Modal } from "../Modal/Modal";
 
-function AppUI({
-  totalTodos,
-  completedTodos,
-  searchValue,
-  setSearchValue,
-  searchedTodos,
-  completeTodo,
-  deleteTodo,
-}) {
+function AppUI() {
+  const { error, loading, searchedTodos, completeTodo, deleteTodo, openModal, setOpenModal } =
+    React.useContext(TodoContext);
+
   return (
     <React.Fragment>
-      <TodoCounter
-        total={totalTodos}
-        completed={completedTodos}
-      />
-      <TodoSearch
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-      />
-
+      <TodoCounter />
+      <TodoSearch />
       <TodoList>
-        {searchedTodos.map(todo => (
+        {error && <p>hubo un error...</p>}
+        {loading && <p className="main">Estamos cargando, no desesperes...</p>}
+        {!loading && !searchedTodos.length && <p className="main">¡Crea tu primer TODO!</p>}
+        {searchedTodos.map((todo) => (
           <TodoItem
             key={todo.text}
             text={todo.text}
@@ -36,10 +30,13 @@ function AppUI({
           />
         ))}
       </TodoList>
-
-      <CreateTodoButton />
+      {!!openModal && (
+        <Modal>
+          <TodoForm />
+        </Modal>
+      )}
+      <CreateTodoButton setOpenModal={setOpenModal} />
     </React.Fragment>
   );
 }
-
 export { AppUI };
